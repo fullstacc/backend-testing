@@ -34,6 +34,19 @@ app.get('/api/persons', (request, response) => {
   response.json(persons);
 });
 
+// `<div>Phonebook has info for {responseObject.numberOfPeople} people</div>`
+// server database metadata
+app.get('/info', (request, response) => {
+  let responseObject = {
+    numberOfPeople: persons.length,
+    date: new Date(),
+  };
+  response.status(200).send(
+    `<h1>Phonebook</h1> <div>Phonebook has info for ${responseObject.numberOfPeople} people</div>
+      <div>${responseObject.date}</div>`
+  );
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
