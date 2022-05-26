@@ -1,0 +1,26 @@
+{
+  "name": "backend-testing",
+  "version": "1.0.0",
+  "description": "a repo for testing out Node, Express, and MongoDB integration",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fullstacc/backend-testing.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fullstacc/backend-testing/issues"
+  },
+  "homepage": "https://github.com/fullstacc/backend-testing#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
+}
