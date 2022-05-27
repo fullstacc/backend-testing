@@ -3,7 +3,7 @@ const app = express();
 
 const PORT = 3001;
 
-const persons = [
+let persons = [
   {
     id: 1,
     name: 'Arto Hellas',
@@ -34,7 +34,6 @@ app.get('/api/persons', (request, response) => {
   response.json(persons);
 });
 
-// `<div>Phonebook has info for {responseObject.numberOfPeople} people</div>`
 // server database metadata
 app.get('/info', (request, response) => {
   let responseObject = {
@@ -49,13 +48,33 @@ app.get('/info', (request, response) => {
 
 app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id);
-  const person = persons.find((person) => person.id === id);
+  let person = persons.find((person) => person.id === id);
 
   if (person) {
     response.json(person);
   } else {
     response.status(404).end();
   }
+});
+
+app.delete('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id);
+  response.send('Got a DELETE request at /id');
+  console.log('total url is', id);
+  console.log('req path is', request.path);
+  persons = persons.filter((person) => person.id !== id);
+  response.status(204).end();
+  //   console.log('made it here', id);
+  //   persons = persons.filter((person) => person.id !== id);
+  //   let person = persons.find((person) => person.id === id);
+
+  //   if (person) {
+  //     response.status(204).end();
+  //   } else {
+  //     response.status(404).send({ foo: 'bar' }).end();
+  //   }
+
+  //   response.status(204).end();
 });
 
 app.listen(PORT, () => {
