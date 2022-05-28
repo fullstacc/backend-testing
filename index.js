@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
 const PORT = 3001;
 
 let persons = [
@@ -64,17 +66,51 @@ app.delete('/api/persons/:id', (request, response) => {
   console.log('req path is', request.path);
   persons = persons.filter((person) => person.id !== id);
   response.status(204).end();
-  //   console.log('made it here', id);
-  //   persons = persons.filter((person) => person.id !== id);
-  //   let person = persons.find((person) => person.id === id);
+});
 
-  //   if (person) {
-  //     response.status(204).end();
-  //   } else {
-  //     response.status(404).send({ foo: 'bar' }).end();
-  //   }
+/* - Generate a new id for the phonebook entry with the Math.random function. 
+Use a big enough range for your random values so that the likelihood of creating duplicate ids is small.
+*/
+app.post('/api/persons', (request, response) => {
+  // generate random id
+  // this section courtesy of tutorial @ learnersbucket
+  // TODO: Refactor into a more concise way to generate random user ID's
+  let guid = () => {
+    let s4 = () => {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    };
+    //return id of format 'aaaaaaaa'-'aaaa'
+    return s4() + s4() + '-' + s4();
+  };
+  console.log('these are the request headers', request.headers);
+  const body = request.body;
+  console.log('this is the request body', body);
 
-  //   response.status(204).end();
+  if (!body.name || !body.number) {
+    return response.status(400).json({
+      error: 'missing fields',
+    });
+  }
+
+  const person = {
+    name: body.name,
+    number: body.number,
+    date: new Date(),
+    id: guid(),
+  };
+
+  persons = persons.concat(person);
+
+  response.json(person);
+
+  // const person = request.body;
+  // person.id = guid();
+
+  // persons = persons.concat(person);
+
+  // response.json(person);
 });
 
 app.listen(PORT, () => {
