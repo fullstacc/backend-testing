@@ -101,16 +101,14 @@ app.post('/api/persons', (request, response) => {
     id: guid(),
   };
 
+  if (persons.find((x) => x.name === person.name)) {
+    return response.status(400).json({
+      error: 'name already exists in database',
+    });
+  }
   persons = persons.concat(person);
 
   response.json(person);
-
-  // const person = request.body;
-  // person.id = guid();
-
-  // persons = persons.concat(person);
-
-  // response.json(person);
 });
 
 app.listen(PORT, () => {
