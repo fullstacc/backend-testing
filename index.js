@@ -1,8 +1,10 @@
 const express = require('express');
+const morgan = require('morgan');
 const app = express();
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
+// app.use(morgan('tiny'));
 const PORT = 3001;
 
 let persons = [
@@ -32,12 +34,12 @@ app.get('/', (request, response) => {
   response.send('<h1>Phonebook</h1>');
 });
 
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', morgan('tiny'), (request, response) => {
   response.json(persons);
 });
 
 // server database metadata
-app.get('/info', (request, response) => {
+app.get('/info', morgan('tiny'), (request, response) => {
   let responseObject = {
     numberOfPeople: persons.length,
     date: new Date(),
@@ -68,48 +70,66 @@ app.delete('/api/persons/:id', (request, response) => {
   response.status(204).end();
 });
 
-/* - Generate a new id for the phonebook entry with the Math.random function. 
-Use a big enough range for your random values so that the likelihood of creating duplicate ids is small.
-*/
-app.post('/api/persons', (request, response) => {
-  // generate random id
-  // this section courtesy of tutorial @ learnersbucket
-  // TODO: Refactor into a more concise way to generate random user ID's
-  let guid = () => {
-    let s4 = () => {
-      return Math.floor((1 + Math.random()) * 0x10000)
-        .toString(16)
-        .substring(1);
+app.post(
+  '/api/persons',
+  morgan(function (tokens, req, res) {
+    return [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens.res(req, res, 'content-length'),
+      '-',
+      tokens['response-time'](req, res),
+      'ms',
+      tokens.res.body(req, res),
+    ].join(' ');
+  }),
+  (request, response) => {
+    // generate random id
+    // this section courtesy of tutorial @ learnersbucket
+    // TODO: Refactor into a more concise way to generate random user ID's
+    let guid = () => {
+      let s4 = () => {
+        return Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16)
+          .substring(1);
+      };
+      //return id of format 'aaaaaaaa'-'aaaa'
+      return s4() + s4() + '-' + s4();
     };
-    //return id of format 'aaaaaaaa'-'aaaa'
-    return s4() + s4() + '-' + s4();
-  };
-  console.log('these are the request headers', request.headers);
-  const body = request.body;
-  console.log('this is the request body', body);
+    console.log('these are the request headers', request.headers);
+    const body = request.body;
+    console.log('this is the request body', body);
 
-  if (!body.name || !body.number) {
-    return response.status(400).json({
-      error: 'missing fields',
-    });
+    if (!body.name || !body.number) {
+      return response.status(400).json({
+        error: 'missing fields',
+      });
+    }
+
+    const person = {
+      name: body.name,
+      number: body.number,
+      date: new Date(),
+      id: guid(),
+    };
+
+    if (persons.find((x) => x.name === person.name)) {
+      return response.status(400).json({
+        error: 'name already exists in database',
+      });
+    }
+    persons = persons.concat(person);
+
+    response.json(person);
   }
+);
 
-  const person = {
-    name: body.name,
-    number: body.number,
-    date: new Date(),
-    id: guid(),
-  };
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' });
+};
 
-  if (persons.find((x) => x.name === person.name)) {
-    return response.status(400).json({
-      error: 'name already exists in database',
-    });
-  }
-  persons = persons.concat(person);
-
-  response.json(person);
-});
+app.use(unknownEndpoint);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
