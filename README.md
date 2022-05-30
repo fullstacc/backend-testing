@@ -31,3 +31,12 @@ a repo for testing out Node, Express, and MongoDB integration
   - The name or number is missing
   - The name already exists in the phonebook
 - Respond to requests like these with the appropriate status code, and also send back information that explains the reason for the error
+
+[x] 3.7 - Logging
+
+- Add the morgan middleware to your application for logging.
+  - Configure it to log messages to your console based on the tiny configuration.
+
+[x] 3.8 - Advanced Logging
+
+- Configure morgan so that it also shows the data sent in HTTP POST requests
