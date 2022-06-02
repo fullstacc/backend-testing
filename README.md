@@ -40,3 +40,12 @@ a repo for testing out Node, Express, and MongoDB integration
 [x] 3.8 - Advanced Logging
 
 - Configure morgan so that it also shows the data sent in HTTP POST requests
+
+[x] 3.9 - Phonebook Front End + Back End
+
+- Make the backend work with the phonebook frontend from the exercises of the previous part.
+
+[ ] 3.10 - Deploy to the Internet
+
+- Deploy the backend to the internet, for example to Heroku.
+- Test the deployed backend with a browser and Postman or VS Code REST client to ensure it works.
