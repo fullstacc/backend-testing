@@ -45,7 +45,12 @@ a repo for testing out Node, Express, and MongoDB integration
 
 - Make the backend work with the phonebook frontend from the exercises of the previous part.
 
-[ ] 3.10 - Deploy to the Internet
+[x] 3.10 - Deploy to the Internet
 
 - Deploy the backend to the internet, for example to Heroku.
 - Test the deployed backend with a browser and Postman or VS Code REST client to ensure it works.
+
+[x] 3.11 - Production Build
+
+- Generate a production build of your frontend, and add it to the internet application using the method introduced in this part.
+- Also make sure that the frontend still works locally (in development mode when started with command `npm start`).
