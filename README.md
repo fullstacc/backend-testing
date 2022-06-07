@@ -55,7 +55,7 @@ a repo for testing out Node, Express, and MongoDB integration
 - Generate a production build of your frontend, and add it to the internet application using the method introduced in this part.
 - Also make sure that the frontend still works locally (in development mode when started with command `npm start`).
 
-[ ] 3.12 - Command-Line Database
+[x] 3.12 - Command-Line Database
 
 - Create a cloud-based MongoDB database for the phonebook application with MongoDB Atlas.
 - Create a mongo.js file in the project directory, that can be used for adding entries to the phonebook, and for listing all of the existing entries in the phonebook.
