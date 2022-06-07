@@ -4,3 +4,6 @@
 # testing folders
 /requests
 /phonebook_upgrades
+
+# misc
+/mongo2.js
