@@ -7,3 +7,6 @@
 
 # misc
 /mongo2.js
+
+# environment variables
+.env

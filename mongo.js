@@ -9,11 +9,7 @@ if (process.argv.length < 3) {
   process.exit(1);
 }
 
-// define schema
-const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
-});
+
 
 // schema -> model
 const Person = mongoose.model('Person', personSchema);
