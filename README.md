@@ -62,3 +62,8 @@ a repo for testing out Node, Express, and MongoDB integration
 - The application should work as follows. You use the program by passing three command-line arguments (the first is the password, the second is the name, and the third is the phone number)
 - if the name contains whitespace characters, it must be enclosed in quotes
 - If the password is the only parameter given to the program, Then the program should display all of the entries in the phonebook
+
+[ ] 3.13 - Phonebook database, step1
+- Change the fetching of all phonebook entries so that the data is fetched from the database.
+- Verify that the frontend works after the changes have been made.
+- write all Mongoose-specific code into its own module
