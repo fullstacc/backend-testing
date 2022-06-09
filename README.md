@@ -63,7 +63,14 @@ a repo for testing out Node, Express, and MongoDB integration
 - if the name contains whitespace characters, it must be enclosed in quotes
 - If the password is the only parameter given to the program, Then the program should display all of the entries in the phonebook
 
-[ ] 3.13 - Phonebook database, step1
+[x] 3.13 - Phonebook database, step1
+
 - Change the fetching of all phonebook entries so that the data is fetched from the database.
 - Verify that the frontend works after the changes have been made.
 - write all Mongoose-specific code into its own module
+
+[x] 3.14 - Phonebook database, step2
+
+- Change the backend so that new numbers are saved to the database. Verify that your frontend still works after the changes.
+  At this point, you can choose to simply allow users to create all phonebook entries.
+- The phonebook can have multiple entries for a person with the same name.

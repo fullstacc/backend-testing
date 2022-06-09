@@ -7,46 +7,37 @@ app.use(bodyParser.json());
 app.use(express.static('build'));
 
 const Person = require('./models/person');
+const { default: mongoose } = require('mongoose');
 
 const PORT = process.env.PORT || 3001;
-
-// hard-coded test data
-// let persons = [
-//   {
-//     id: 1,
-//     name: 'Arto Hellas',
-//     number: '040-123456',
-//   },
-//   {
-//     id: 2,
-//     name: 'Ada Lovelace',
-//     number: '39-44-5323523',
-//   },
-//   {
-//     id: 3,
-//     name: 'Dan Abramov',
-//     number: '12-43-234345',
-//   },
-//   {
-//     id: 4,
-//     name: 'Mary Poppendieck',
-//     number: '39-23-6423122',
-//   },
-// ];
 
 app.get('/', (request, response) => {
   response.send('<h1>Phonebook</h1>');
 });
 
-// app.get('/api/persons', morgan('tiny'), (request, response) => {
-//   response.json(persons);
-// });
-
 // retrieve all persons objects from database
 app.get('/api/persons', (request, response) => {
   Person.find({}).then((persons) => {
+    console.log('made it here');
     response.json(persons);
   });
+});
+
+// post object to database
+app.post('/api/persons', (req, res) => {
+  console.log('made it here');
+  const body = req.body;
+  // create a person instance from the request body sent from the front end
+  const newPerson = new Person({
+    name: req.body.name,
+    number: req.body.number,
+  });
+  // save to mongodb
+  newPerson.save().then((result) => {
+    console.log('person added to phonebook');
+  });
+
+  console.log('this is request body', body);
 });
 
 // server database metadata
