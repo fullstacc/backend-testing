@@ -74,3 +74,21 @@ a repo for testing out Node, Express, and MongoDB integration
 - Change the backend so that new numbers are saved to the database. Verify that your frontend still works after the changes.
   At this point, you can choose to simply allow users to create all phonebook entries.
 - The phonebook can have multiple entries for a person with the same name.
+
+[x] 3.15 - Phonebook database, step3 (delete from db)
+
+- Change the backend so that deleting phonebook entries is reflected in the database.
+
+[x] 3.16 - Phonebook database, step4 (error handler middlware)
+
+- Move the error handling of the application to a new error handler middleware.
+
+[ ] 3.17 - Phonebook database, step5 (updating contact info)
+
+- If the user tries to create a new phonebook entry for a person whose name is already in the phonebook, the frontend will try to update the phone number of the existing entry by making an HTTP PUT request to the entry's unique URL. Modify the backend to support this request.
+
+[ ] 3.18 - Phonebook database, step6 ( `/api/persons/:id` and `info` routes)
+
+- update handling `/api/persons/:id` and `info` routes to use the database
+
+---

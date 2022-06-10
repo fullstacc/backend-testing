@@ -3,8 +3,8 @@ const morgan = require('morgan');
 const app = express();
 
 const bodyParser = require('body-parser');
-app.use(bodyParser.json());
 app.use(express.static('build'));
+app.use(bodyParser.json());
 
 const Person = require('./models/person');
 const { default: mongoose } = require('mongoose');
@@ -52,83 +52,42 @@ app.post('/api/persons', (req, res) => {
 //   );
 // });
 
-// find by id operation [old]
-// app.get('/api/persons/:id', (request, response) => {
-//   const id = Number(request.params.id);
-//   let person = persons.find((person) => person.id === id);
+// find by id operation
+// next function passes error to middleware
+app.get('/api/persons/:id', (req, res, next) => {
+  Person.findById(req.params.id)
+    .then((person) => {
+      if (person) {
+        res.json(person);
+      } else {
+        res.status(404).end();
+      }
+    })
+    .catch((e) => next(e));
+});
 
-//   if (person) {
-//     response.json(person);
-//   } else {
-//     response.status(404).end();
-//   }
-// });
+// delete operation [new]
+app.delete('/api/persons/:id', (req, res) => {
+  Person.findByIdAndRemove(req.params.id)
+    .then((res) => {
+      res.status(204).end();
+    })
+    .catch((e) => next(e));
+});
 
-// delete operation [old]
-// app.delete('/api/persons/:id', (request, response) => {
-//   const id = Number(request.params.id);
-//   response.send('Got a DELETE request at /id');
-//   console.log('total url is', id);
-//   console.log('req path is', request.path);
-//   persons = persons.filter((person) => person.id !== id);
-//   response.status(204).end();
-// });
+// put operation [find by id and update it]
+app.put('/api/persons/:id', (req, res, next) => {
+  const body = req.body;
 
-// add operation [old]
-// app.post(
-//   '/api/persons',
-//   morgan(function (tokens, req, res) {
-//     return [
-//       tokens.method(req, res),
-//       tokens.url(req, res),
-//       tokens.status(req, res),
-//       tokens.res(req, res, 'content-length'),
-//       '-',
-//       tokens['response-time'](req, res),
-//       'ms',
-//       tokens.res.body(req, res),
-//     ].join(' ');
-//   }),
-//   (request, response) => {
-//     // generate random id
-//     // this section courtesy of tutorial @ learnersbucket
-//     // TODO: Refactor into a more concise way to generate random user ID's
-//     let guid = () => {
-//       let s4 = () => {
-//         return Math.floor((1 + Math.random()) * 0x10000)
-//           .toString(16)
-//           .substring(1);
-//       };
-//       //return id of format 'aaaaaaaa'-'aaaa'
-//       return s4() + s4() + '-' + s4();
-//     };
-//     console.log('these are the request headers', request.headers);
-//     const body = request.body;
-//     console.log('this is the request body', body);
+  const newPerson = {
+    name: body.name,
+    number: body.number,
+  };
 
-//     if (!body.name || !body.number) {
-//       return response.status(400).json({
-//         error: 'missing fields',
-//       });
-//     }
-
-// const person = {
-//   name: body.name,
-//   number: body.number,
-//   date: new Date(),
-//   id: guid(),
-// };
-
-//     if (persons.find((x) => x.name === person.name)) {
-//       return response.status(400).json({
-//         error: 'name already exists in database',
-//       });
-//     }
-//     persons = persons.concat(person);
-
-//     response.json(person);
-//   }
-// );
+  Person.findByIdAndUpdate(req.params.id, newPerson, { new: true })
+    .then((updatedPerson) => res.json(updatedPerson))
+    .catch((e) => next(e));
+});
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' });
@@ -139,3 +98,15 @@ app.use(unknownEndpoint);
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message);
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'misformatted id' });
+  }
+
+  next(error);
+};
+
+app.use(errorHandler);
