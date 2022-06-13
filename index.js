@@ -35,7 +35,8 @@ app.post('/api/persons', (req, res) => {
   // save to mongodb
   newPerson.save().then((result) => {
     console.log('person added to phonebook');
-  });
+  })
+  .catch(e) =>next(e);
 
   console.log('this is request body', body);
 });
@@ -77,14 +78,14 @@ app.delete('/api/persons/:id', (req, res) => {
 
 // put operation [find by id and update it]
 app.put('/api/persons/:id', (req, res, next) => {
-  const body = req.body;
+  const {name, number} = req.body
 
-  const newPerson = {
-    name: body.name,
-    number: body.number,
-  };
+  // const newPerson = {
+  //   name: body.name,
+  //   number: body.number,
+  // };
 
-  Person.findByIdAndUpdate(req.params.id, newPerson, { new: true })
+  Person.findByIdAndUpdate(req.params.id, {name, number}, { new: true, runValidators: true, content: 'query' })
     .then((updatedPerson) => res.json(updatedPerson))
     .catch((e) => next(e));
 });
@@ -110,5 +111,6 @@ const errorHandler = (error, request, response, next) => {
 
   next(error);
 };
+}
 
 app.use(errorHandler);
