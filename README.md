@@ -91,4 +91,9 @@ a repo for testing out Node, Express, and MongoDB integration
 
 - update handling `/api/persons/:id` and `info` routes to use the database
 
+
+[ ] 3.19 - Phonebook database ,step7 (error handling and validation)
+- Expand the validation so that the name stored in the database has to be at least three characters long.
+- Expand the frontend so that it displays some form of error message when a validation error occurs.
+
 ---
