@@ -33,10 +33,12 @@ app.post('/api/persons', (req, res, next) => {
     number: req.body.number,
   });
   // save to mongodb
-  newPerson.save().then((result) => {
-    console.log('person added to phonebook');
-  })
-  .catch((e) => next(e));
+  newPerson
+    .save()
+    .then((result) => {
+      console.log('person added to phonebook');
+    })
+    .catch((e) => next(e));
 
   console.log('this is request body', body);
 });
@@ -68,9 +70,9 @@ app.get('/api/persons/:id', (req, res, next) => {
 });
 
 // delete operation [new]
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndRemove(req.params.id)
-    .then((res) => {
+    .then((result) => {
       res.status(204).end();
     })
     .catch((e) => next(e));
@@ -78,21 +80,20 @@ app.delete('/api/persons/:id', (req, res) => {
 
 // put operation [find by id and update it]
 app.put('/api/persons/:id', (req, res, next) => {
-  const {name, number} = req.body
-  console.log('this is the req body', req.body)
-  console.log('this is the req id', req.params.id)
+  const body = req.body;
+  const name = body.name;
+  const number = body.number;
+  console.log('this is the req body', req.body);
+  console.log('this is the req id', req.params.id);
 
   const newPerson = {
     name: name,
-    number: number
-  }
+    number: number,
+  };
 
-
-  // If the user tries to create a new phonebook entry for a person whose name is already in the phonebook, 
-  // the frontend will try to update the phone number of the existing entry by making an HTTP PUT request to the entry's unique URL. 
-  // Modify the backend to support this request.
-
-  Person.findByIdAndUpdate(req.params.id, newPerson, { new: true, runValidators: true, content: 'query' })
+  Person.findByIdAndUpdate(req.params.id, newPerson, {
+    new: true,
+  })
     .then((updatedPerson) => res.json(updatedPerson))
     .catch((e) => next(e));
 });
@@ -112,12 +113,11 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'misformatted id' });
-  }
-  else if (error.name === 'ValidationError') {
-    return response.status(400).json({ error: error.message })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message });
 
-  next(error);
+    next(error);
+  }
 };
-}
 
 app.use(errorHandler);
