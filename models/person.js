@@ -16,7 +16,7 @@ mongoose
 
 // define schema
 const personSchema = new mongoose.Schema({
-  name: { type: String },
+  name: { type: String, required: true },
   number: { type: String },
 });
 
