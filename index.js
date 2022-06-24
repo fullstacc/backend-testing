@@ -18,14 +18,13 @@ app.get('/', (request, response) => {
 // retrieve all persons objects from database
 app.get('/api/persons', (request, response) => {
   Person.find({}).then((persons) => {
-    console.log('made it here');
     response.json(persons);
   });
 });
 
 // post object to database
 app.post('/api/persons', (req, res, next) => {
-  console.log('made it here');
+  console.log('post to db invoked');
   const body = req.body;
   // create a person instance from the request body sent from the front end
   const newPerson = new Person({
@@ -80,20 +79,19 @@ app.delete('/api/persons/:id', (req, res, next) => {
 
 // put operation [find by id and update it]
 app.put('/api/persons/:id', (req, res, next) => {
+  console.log('put to db invoked');
   const body = req.body;
   const name = body.name;
   const number = body.number;
-  console.log('this is the req body', req.body);
-  console.log('this is the req id', req.params.id);
+  console.log('this is the req body going to the db server', req.body);
+  console.log('this is the req id the req is going to', req.params.id);
 
   const newPerson = {
     name: name,
     number: number,
   };
 
-  Person.findByIdAndUpdate(req.params.id, newPerson, {
-    new: true,
-  })
+  Person.findByIdAndUpdate(req.params.id, newPerson, { new: true })
     .then((updatedPerson) => res.json(updatedPerson))
     .catch((e) => next(e));
 });

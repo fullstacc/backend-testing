@@ -83,16 +83,16 @@ a repo for testing out Node, Express, and MongoDB integration
 
 - Move the error handling of the application to a new error handler middleware.
 
-[ ] 3.17 - Phonebook database, step5 (updating contact info)
+[x] 3.17 - Phonebook database, step5 (updating contact info)
 
 - If the user tries to create a new phonebook entry for a person whose name is already in the phonebook, the frontend will try to update the phone number of the existing entry by making an HTTP PUT request to the entry's unique URL. Modify the backend to support this request.
 
-[ ] 3.18 - Phonebook database, step6 ( `/api/persons/:id` and `info` routes)
+[x] 3.18 - Phonebook database, step6 ( `/api/persons/:id` and `info` routes)
 
 - update handling `/api/persons/:id` and `info` routes to use the database
 
-
 [ ] 3.19 - Phonebook database ,step7 (error handling and validation)
+
 - Expand the validation so that the name stored in the database has to be at least three characters long.
 - Expand the frontend so that it displays some form of error message when a validation error occurs.
 
